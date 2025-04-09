@@ -10,7 +10,26 @@ Game Object will Render
 '''
 import pygame
 import time
-
+class TargetIter:
+    def __init__(self):
+        self.target_dictionary={}
+        self.start_target=""
+    def add_initial_target(self,target):
+        self.target_dictionary[target.target_id]=target
+        self.start_target=target.target_id
+        target.next_layer=target.target_id
+        target.prev_layer=target.target_id
+    def remove_target(self,target):
+        pass
+    def add_target_to_front(self,target):
+        pass
+    def add_target_to_back(self,target):
+        pass
+    def __iter__(self,mode):
+        pass
+    def add_target_at(self,target,loc):
+        pass
+    
 class Game:
     def __init__(self):
         self.targets=[]
@@ -42,11 +61,14 @@ class Game:
         while self.running:
             self.tick()
             self.clock.tick(30)
-        
+     
 class Target:
-    def __init__(self, render_info, parent_id, is_clone,game,local_variables):
+    def __init__(self, render_info, parent_id, is_clone,game,local_variables,next_layer,prev_layer,target_id):
         self.x=render_info["x"]
         self.y=render_info["y"]
+        self.next_layer=next_layer
+        self.target_id=target_id
+        self.prev_layer=prev_layer
         self.costume_list=render_info["costume_list"]
         self.current_costume=render_info["current_costume"]
         self.direction=render_info["direction"]
