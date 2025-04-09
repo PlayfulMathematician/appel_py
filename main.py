@@ -20,15 +20,29 @@ class TargetIter:
         target.next_layer=target.target_id
         target.prev_layer=target.target_id
     def remove_target(self,target):
-        pass
+        if target.target_id in self.target_dictionary:
+            prev_target=self.target_dictionary[target.prev_layer]
+            next_target=self.target_dictionary[target.next_layer]
+            prev_target.next_layer=next_target.target_id
+            next_target.prev_layer=prev_target.target_id
+            if self.start_target == target.target_id:
+                self.start_target=next_target.target_id
+            del self.target_dictionary[target.target_id]
+    def add_target_to_back(self,target):
+        target_at_start=self.target_dictionary[self.start_target]
+        target_at_end=self.target_dictionary[target_at_start.prev_target]
+        target_at_start.prev_layer=target.target_id
+        target_at_end.next_layer=target.target_id
+        target.next_target=self.start_target
+        target.prev_target=target_at_start.prev_target
+        self.target_dictionary[target.target_id]=target
+        self.start_target=target.target_id
+
+
     def add_target_to_front(self,target):
         pass
-    def add_target_to_back(self,target):
-        pass
-    def __iter__(self,mode):
-        pass
-    def add_target_at(self,target,loc):
-        pass
+    
+    
     
 class Game:
     def __init__(self):
@@ -37,8 +51,7 @@ class Game:
         self.running=True
         self.clock = pygame.time.Clock()
 
-    def reorder_targets(self):
-        pass
+    
 
     def iterate_on_targets(self):
         pass
@@ -53,9 +66,7 @@ class Game:
 
     def tick(self):
         self.getuserinput()
-        self.reorder_targets()
         self.iterate_on_targets()
-        self.reorder_targets()
         self.render_targets()
     def run(self):
         while self.running:
