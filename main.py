@@ -29,6 +29,11 @@ class TargetIter:
                 self.start_target=next_target.target_id
             del self.target_dictionary[target.target_id]
     def add_target_to_back(self,target):
+        self.add_target_to_front(target)
+        self.start_target=target.target_id
+
+
+    def add_target_to_front(self,target):
         target_at_start=self.target_dictionary[self.start_target]
         target_at_end=self.target_dictionary[target_at_start.prev_target]
         target_at_start.prev_layer=target.target_id
@@ -36,11 +41,6 @@ class TargetIter:
         target.next_target=self.start_target
         target.prev_target=target_at_start.prev_target
         self.target_dictionary[target.target_id]=target
-        self.start_target=target.target_id
-
-
-    def add_target_to_front(self,target):
-        pass
     
     
     
