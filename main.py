@@ -95,9 +95,9 @@ class Target:
     def delete_this_clone(self):
         if self.is_clone:
             self.active=False
+            self.game.targets.remove_target(self)
             self.costume_list=[None]
             self.current_costume=0
-            self.layer=None
             self.local_variables=[]
             self.parent_id=None
      
