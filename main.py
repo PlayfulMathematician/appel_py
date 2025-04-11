@@ -10,6 +10,7 @@ Game Object will Render
 '''
 import pygame
 import time
+
 class TargetIter:
     def __init__(self):
         self.target_dictionary={}
@@ -85,8 +86,7 @@ class Target:
         self.direction=render_info["direction"]
         self.direction_style=render_info["direction_style"]
         self.visibility=render_info["visibility"]
-        self.layer=render_info["layer"]
-        self.graphic=render_info["graphic"]
+        self.graphic_effects=render_info["graphic_effects"]
         self.parent_id=parent_id
         self.is_clone=is_clone
         self.active=True
