@@ -9,17 +9,55 @@ Rotation Mode:
 Game Object will Render
 '''
 import pygame
+import numpy as np
 import time
+class Angle:
+    def __init__(self, angle, rotation_mode):
+        try:
+            self.degree=float(angle)
+            self.rotation_mode=int(rotation_mode)
+        except ValueError:
+            self.degree=90
+            self.rotation_mode=0
+    
+    def set_rotation_mode(self, rotation_mode):
+        self.rotation_mode=rotation_mode
 
+    def set_angle(self,angle):
+        angle_float=(float(angle)+179)%360-179
+        self.degree=angle_float
+
+    def get_angle(self):
+        return self.degree
+    
+    def rotation_matrix(self):
+        if self.rotation_mode==2:
+            return np.array([[1,0],[0,1]])
+        if self.rotation_mode==1:
+            if  self.degree>0:
+                return np.array([[1,0],[0,1]])
+            else:
+                return np.array([[-1,0],[0,1]])
+        angle_rad=np.deg2rad(90-self.degree)
+        return np.array([[np.cos(angle_rad),-np.sin(angle_rad)],[np.sin(angle_rad),np.cos(angle_rad)]])
+    
+    def turn_cw(self,angle):
+        self.degree=(self.degree+angle+179)%360-179
+
+    def turn_ccw(self,angle):
+        self.degree=(self.degree-angle+179)%360-179
+        
 class TargetIter:
     def __init__(self):
         self.target_dictionary={}
         self.start_target=""
+
     def add_initial_target(self,target):
         self.target_dictionary[target.target_id]=target
         self.start_target=target.target_id
         target.next_layer=target.target_id
         target.prev_layer=target.target_id
+
     def remove_target(self,target):
         if target.target_id in self.target_dictionary:
             prev_target=self.target_dictionary[target.prev_layer]
@@ -29,19 +67,39 @@ class TargetIter:
             if self.start_target == target.target_id:
                 self.start_target=next_target.target_id
             del self.target_dictionary[target.target_id]
+
     def add_target_to_back(self,target):
+        '''Adds the target to the back layer'''
         self.add_target_to_front(target)
         self.start_target=target.target_id
 
-
     def add_target_to_front(self,target):
+        '''
+        Adds the target to the front layer
+        '''
         target_at_start=self.target_dictionary[self.start_target]
-        target_at_end=self.target_dictionary[target_at_start.prev_target]
+        target_at_end=self.target_dictionary[target_at_start.prev_layer]
         target_at_start.prev_layer=target.target_id
         target_at_end.next_layer=target.target_id
-        target.next_target=self.start_target
-        target.prev_target=target_at_start.prev_target
+        target.next_layer=self.start_target
+        target.prev_layer=target_at_start.prev_layer
         self.target_dictionary[target.target_id]=target
+
+    def move_target_forward_layers(self,target,n):
+        pass
+
+    def move_target_backward_layers(self,target,n):
+        pass
+
+    def set_up_iterator(self):
+        pass
+
+    def __iter__(self):
+        pass
+
+    def __next__(self):
+        pass
+    
     
     
     
